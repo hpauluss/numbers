@@ -5,6 +5,8 @@
 # create picture of palindromatic years with markup of prime numbers,
 # using ImageMagick tools
 
+MY_PROG=$( basename $0 )
+
 
 ##----- INITIALISE VARIABLES ------------------------------------##
 
@@ -19,10 +21,8 @@ LIST_PALINDROME=$TEMP_DIR/list-palindrome-anno.txt
 LIST_PALINDROME_PRIME=$TEMP_DIR/list-palindrome-anno-v2.txt
 
 # range of years to be analysed
-FIRST=10   # first year
-LAST=2000  # last year
-# for testing purposes, make range smaller:
-#FIRST=1000
+FIRST=${FIRST:=10}   # first year
+LAST=${LAST:=2000}   # last year
 
 mkdir -p $TEMP_DIR_PICT
 
@@ -41,6 +41,47 @@ if [ "${#progMissing[@]}" -gt 0 ]; then
     echo "ERROR: programs(s) NOT FOUND:" ${progMissing[*]}
     exit 1
 fi
+
+
+##----- HELP FUNCTIONS ------------------------------------------##
+
+
+function version()
+{
+   (
+     echo "$MY_PROG (V1.0: 01-Jul-2019)"
+     echo "bash script by hpauluss"
+   ) >&2
+   exit 0
+}
+
+function usage()
+{
+   (
+      echo -e "Usage:      Create palindromic image\n"
+      echo -e 'Call:       '$MY_PROG' [-options]\n'
+      echo -e "Options:    -h: help"
+      echo -e "            -s: shuffle"
+      echo -e "            -v: version\n"
+
+   ) >&2
+   exit 0
+}
+
+# If you do not want to shuffle the list of years,
+# cat will be used instead of shuf
+PROCESS_YEARS=cat
+
+# process options
+while getopts "hvs" opt; do
+   case $opt in
+     h ) usage; exit 0 ;;
+     v ) version; exit 0 ;;
+     s ) PROCESS_YEARS=shuf ;;
+     * ) usage; exit 1 ;;
+   esac
+done
+shift $(($OPTIND - 1))
 
 
 ##----- RESET VARIABLES -----------------------------------------##
@@ -91,7 +132,7 @@ function crea_images () {
 
     cat $LIST_PALINDROME_PRIME |
 	# head -30 |
-	shuf |
+	$PROCESS_YEARS |
 	while read f p;
 	do
 	    echo '    ===' $f;
