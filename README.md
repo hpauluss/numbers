@@ -10,7 +10,7 @@ The script needs access to the perl script [check_prime.pl](check_prime.pl) to a
 
 ## Sample calls
 
-The following command will create a matrix of the (default set of) years 10-2000, whereby the years sequence is randomize (i.e. *shuffled*):
+The following command will create a matrix of the (default set of) years 10-2000, whereby the years sequence is randomized (i.e. *shuffled*):
 
     $ crea-palindrome-year.sh -s
 
