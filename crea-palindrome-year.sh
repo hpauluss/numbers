@@ -24,6 +24,9 @@ LIST_PALINDROME_PRIME=$TEMP_DIR/list-palindrome-anno-v2.txt
 FIRST=${FIRST:=10}   # first year
 LAST=${LAST:=2000}   # last year
 
+# Default label
+PALINDROME_LABEL=palindrome-anno
+
 mkdir -p $TEMP_DIR_PICT
 
 
@@ -62,6 +65,7 @@ function usage()
       echo -e 'Call:       '$MY_PROG' [-options]\n'
       echo -e "Options:    -h: help"
       echo -e "            -s: shuffle"
+      echo -e "            -p: watermark label (default: 'palindrome-anno')"
       echo -e "            -v: version\n"
 
    ) >&2
@@ -73,10 +77,11 @@ function usage()
 PROCESS_YEARS=cat
 
 # process options
-while getopts "hvs" opt; do
+while getopts "hvsp:" opt; do
    case $opt in
      h ) usage; exit 0 ;;
      v ) version; exit 0 ;;
+     p ) PALINDROME_LABEL=${OPTARG} ;;
      s ) PROCESS_YEARS=shuf ;;
      * ) usage; exit 1 ;;
    esac
@@ -176,7 +181,7 @@ function crea_watermark () {
     convert -size 900x250 xc:transparent \
 	    -pointsize 120 -font Times-New-Roman-Bold \
 	    -gravity center \
-	    -annotate +0+0 "palindrome-anno" $TEMP_DIR_PICT/logo_palindrome.png
+	    -annotate +0+0 "$PALINDROME_LABEL" $TEMP_DIR_PICT/logo_palindrome.png
 
 }
 
